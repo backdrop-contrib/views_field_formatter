@@ -117,7 +117,7 @@ function views_field_formatter_field_formatter_view($entity_type, $entity, $fiel
   if ($display['type'] == 'views_field_formatter') {
     foreach ($items as $delta => $item) {
       $element[$delta] = array(
-        '#markup' => views_embed_view($view, $view_display, $item['value'], $delta)
+        '#markup' => views_embed_view($view, $view_display, $item['value'], $entity->$key, $delta)
       );
     }
   }
