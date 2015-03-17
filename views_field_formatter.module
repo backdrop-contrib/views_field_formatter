@@ -27,19 +27,15 @@ function views_field_formatter_field_formatter_settings_form($field, $instance, 
   $settings = $display['settings'];
   $element = array();
 
-  $field_id = $field['field_name'];
-  $field_instances = field_info_instances();
-
+  // Get all available entities 
   $enabled_entities = array();
-  foreach($field_instances as $entity => $bundles) {
-    foreach($bundles as $bundle => $bundle_data) {
-      if (isset($field_instances[$entity][$bundle][$field_id])) {
-        $enabled_entities[$entity] = $entity;
-      }
-    }
-  };
+  $entities = entity_get_info();
+  foreach($entities as $entity) {
+    $enabled_entities[] = $entity['base table'];
+  }
 
-  $views = views_get_all_views();
+  // Get only enabled views
+  $views = views_get_enabled_views();
   $options1 = array();
   foreach ($views as $view => $data) {
     // If editing a field from a Views, remove the current view from the list.
@@ -47,17 +43,13 @@ function views_field_formatter_field_formatter_settings_form($field, $instance, 
       continue;
     }
 
-    // Remove Views who doesn't have the tag 'views_field_formatter'.
+    // Remove Views which don't have the tag 'views_field_formatter'.
     $tags = explode(',', $data->tag);
     if (!in_array('views_field_formatter', $tags)) {
       continue;
     }
 
-    // Remove disabled views.
-    if ($data->disabled == TRUE) {
-      continue;
-    }
-
+    // Filter views to only include available entities
     if (in_array($data->base_table, $enabled_entities)) {
       foreach ($data->display as $display => $display_data) {
         $options1[$data->human_name][$view . '::' . $display] = $display;
