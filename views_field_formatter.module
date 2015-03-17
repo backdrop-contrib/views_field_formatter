@@ -27,7 +27,7 @@ function views_field_formatter_field_formatter_settings_form($field, $instance, 
   $settings = $display['settings'];
   $element = array();
 
-  // Get all available entities 
+  // Get all available entities
   $enabled_entities = array();
   $entities = entity_get_info();
   foreach($entities as $entity) {
@@ -36,7 +36,7 @@ function views_field_formatter_field_formatter_settings_form($field, $instance, 
 
   // Get only enabled views
   $views = views_get_enabled_views();
-  $options1 = array();
+  $options = array();
   foreach ($views as $view => $data) {
     // If editing a field from a Views, remove the current view from the list.
     if (isset($form_state['view']) && $form_state['view']->name == $view) {
@@ -52,18 +52,18 @@ function views_field_formatter_field_formatter_settings_form($field, $instance, 
     // Filter views to only include available entities
     if (in_array($data->base_table, $enabled_entities)) {
       foreach ($data->display as $display => $display_data) {
-        $options1[$data->human_name][$view . '::' . $display] = $display;
+        $options[$data->human_name][$view . '::' . $display] = $display_data->display_title . ' (' . $view . '::' . $display. ')';
       }
     }
   }
 
-  if (!empty($options1)) {
+  if (!empty($options)) {
     $element['view'] = array(
       '#title' => t('View'),
       '#description' => t('Select the view (<em><a href="@add_view_url">or create a new one</a></em>) that will be used to get the value of the field. Only views with tag <em>views_field_formatter</em> will be visible.', array('@add_view_url' => url('admin/structure/views/add'))),
       '#type' => 'select',
       '#default_value' => $settings['view'],
-      '#options' => $options1,
+      '#options' => $options,
     );
   } else {
     $element['help'] = array(
