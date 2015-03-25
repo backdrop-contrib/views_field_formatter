@@ -41,15 +41,34 @@ function views_field_formatter_views_default_views() {
     $handler->display->display_options['fields']['title']['label'] = '';
     $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
     $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-    /* Contextual filter: Content: Nid */
-    $handler->display->display_options['arguments']['nid']['id'] = $key;
-    $handler->display->display_options['arguments']['nid']['table'] = $base_table;
-    $handler->display->display_options['arguments']['nid']['field'] = $key;
+    /* Contextual filter: This is the field item value placeholder */
+    $handler->display->display_options['arguments']['null']['id'] = 'null';
+    $handler->display->display_options['arguments']['null']['table'] = 'views';
+    $handler->display->display_options['arguments']['null']['field'] = 'null';
+    $handler->display->display_options['arguments']['null']['ui_name'] = 'This is the field item value placeholder.';
+    $handler->display->display_options['arguments']['null']['default_argument_type'] = 'fixed';
+    $handler->display->display_options['arguments']['null']['summary']['number_of_records'] = '0';
+    $handler->display->display_options['arguments']['null']['summary']['format'] = 'default_summary';
+    $handler->display->display_options['arguments']['null']['summary_options']['items_per_page'] = '25';
+    /* Contextual filter: This is the entity ID placeholder */
+    $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+    $handler->display->display_options['arguments']['nid']['table'] = 'node';
+    $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+    $handler->display->display_options['arguments']['nid']['ui_name'] = 'This is the entity ID placeholder.';
     $handler->display->display_options['arguments']['nid']['default_action'] = 'not found';
     $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'fixed';
     $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
     $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+    /* Contextual filter: This is the item delta placeholder. */
+    $handler->display->display_options['arguments']['null_1']['id'] = 'null_1';
+    $handler->display->display_options['arguments']['null_1']['table'] = 'views';
+    $handler->display->display_options['arguments']['null_1']['field'] = 'null';
+    $handler->display->display_options['arguments']['null_1']['ui_name'] = 'This is the item delta placeholder.';
+    $handler->display->display_options['arguments']['null_1']['default_argument_type'] = 'fixed';
+    $handler->display->display_options['arguments']['null_1']['summary']['number_of_records'] = '0';
+    $handler->display->display_options['arguments']['null_1']['summary']['format'] = 'default_summary';
+    $handler->display->display_options['arguments']['null_1']['summary_options']['items_per_page'] = '25';
 
     $views[$view->name] = $view;
   }
