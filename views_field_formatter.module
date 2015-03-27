@@ -136,3 +136,13 @@ function views_field_formatter_views_api() {
     'path' => drupal_get_path('module', 'views_field_formatter') . '/views',
   );
 }
+
+/**
+ * Boolval is only available for PHP >= 5.5, I didn't know that.
+ * Anyway, here's the fix.
+ */
+if (!function_exists('boolval')) {
+  function boolval($val) {
+    return (bool) $val;
+  }
+}
