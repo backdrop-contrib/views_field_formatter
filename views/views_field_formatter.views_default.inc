@@ -34,13 +34,19 @@ function views_field_formatter_views_default_views() {
     $handler->display->display_options['pager']['options']['offset'] = '0';
     $handler->display->display_options['style_plugin'] = 'default';
     $handler->display->display_options['row_plugin'] = 'fields';
-    /* Field: Content: Title */
-    $handler->display->display_options['fields']['title']['id'] = 'title';
-    $handler->display->display_options['fields']['title']['table'] = $base_table;
-    $handler->display->display_options['fields']['title']['field'] = 'title';
-    $handler->display->display_options['fields']['title']['label'] = '';
-    $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-    $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+    /* Field: Global: Custom text */
+    $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+    $handler->display->display_options['fields']['nothing']['table'] = 'views';
+    $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+    $handler->display->display_options['fields']['nothing']['label'] = '';
+    $handler->display->display_options['fields']['nothing']['alter']['text'] = 'This is a default view field \'Global: Custom text\'.
+You should remove it and display the field that you want.';
+    $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
+    /* Field: Entity: ID */
+    $handler->display->display_options['fields'][$key]['id'] = $key;
+    $handler->display->display_options['fields'][$key]['table'] = $base_table;
+    $handler->display->display_options['fields'][$key]['field'] = $key;
+    $handler->display->display_options['fields'][$key]['exclude'] = TRUE;
     /* Contextual filter: This is the field item value placeholder */
     $handler->display->display_options['arguments']['null']['id'] = 'null';
     $handler->display->display_options['arguments']['null']['table'] = 'views';
@@ -51,15 +57,15 @@ function views_field_formatter_views_default_views() {
     $handler->display->display_options['arguments']['null']['summary']['format'] = 'default_summary';
     $handler->display->display_options['arguments']['null']['summary_options']['items_per_page'] = '25';
     /* Contextual filter: This is the entity ID placeholder */
-    $handler->display->display_options['arguments']['nid']['id'] = 'nid';
-    $handler->display->display_options['arguments']['nid']['table'] = 'node';
-    $handler->display->display_options['arguments']['nid']['field'] = 'nid';
-    $handler->display->display_options['arguments']['nid']['ui_name'] = 'This is the entity ID placeholder.';
-    $handler->display->display_options['arguments']['nid']['default_action'] = 'not found';
-    $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'fixed';
-    $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
-    $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
-    $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+    $handler->display->display_options['arguments'][$key]['id'] = $key;
+    $handler->display->display_options['arguments'][$key]['table'] = $base_table;
+    $handler->display->display_options['arguments'][$key]['field'] = $key;
+    $handler->display->display_options['arguments'][$key]['ui_name'] = 'This is the entity ID placeholder.';
+    $handler->display->display_options['arguments'][$key]['default_action'] = 'not found';
+    $handler->display->display_options['arguments'][$key]['default_argument_type'] = 'fixed';
+    $handler->display->display_options['arguments'][$key]['summary']['number_of_records'] = '0';
+    $handler->display->display_options['arguments'][$key]['summary']['format'] = 'default_summary';
+    $handler->display->display_options['arguments'][$key]['summary_options']['items_per_page'] = '25';
     /* Contextual filter: This is the item delta placeholder. */
     $handler->display->display_options['arguments']['null_1']['id'] = 'null_1';
     $handler->display->display_options['arguments']['null_1']['table'] = 'views';

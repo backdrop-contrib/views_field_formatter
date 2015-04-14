@@ -109,18 +109,21 @@ function views_field_formatter_field_formatter_view($entity_type, $entity, $fiel
   $settings = $display['settings']['views_field_formatter'];
   list($view, $view_display) = explode('::', $settings['view']);
 
+  $field_columns = array_keys($field['columns']);
+  $index = array_shift($field_columns);
+
   $entity_info = entity_get_info($entity_type);
   $key = $entity_info['entity keys']['id'];
 
   if (isset($field['cardinality']) && ($field['cardinality'] == -1) && (boolval($settings['multiple']) == TRUE)) {
     foreach ($items as $delta => $item) {
-      $value = isset($item['value']) ? $item['value'] : NULL;
+      $value = isset($item[$index]) ? $item[$index] : NULL;
       $element[$delta] = array(
         '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, $delta)
       );
     }
   } else {
-    $value = isset($items[0]['value']) ? $items[0]['value'] : NULL;
+    $value = isset($items[0][$index]) ? $items[0][$index] : NULL;
     $element[0] = array(
       '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, 0)
     );
