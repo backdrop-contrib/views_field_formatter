@@ -114,13 +114,15 @@ function views_field_formatter_field_formatter_view($entity_type, $entity, $fiel
 
   if (isset($field['cardinality']) && ($field['cardinality'] == -1) && (boolval($settings['multiple']) == TRUE)) {
     foreach ($items as $delta => $item) {
+      $value = isset($item['value']) ? $item['value'] : NULL;
       $element[$delta] = array(
-        '#markup' => views_embed_view($view, $view_display, $item['value'], $entity->$key, $delta)
+        '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, $delta)
       );
     }
   } else {
+    $value = isset($items[0]['value']) ? $items[0]['value'] : NULL;
     $element[0] = array(
-      '#markup' => views_embed_view($view, $view_display, $items[0]['value'], $entity->$key, 0)
+      '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, 0)
     );
   }
 
