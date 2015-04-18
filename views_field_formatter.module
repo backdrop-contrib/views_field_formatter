@@ -115,7 +115,7 @@ function views_field_formatter_field_formatter_view($entity_type, $entity, $fiel
   $entity_info = entity_get_info($entity_type);
   $key = $entity_info['entity keys']['id'];
 
-  if (isset($field['cardinality']) && ($field['cardinality'] == -1) && (boolval($settings['multiple']) == TRUE)) {
+  if (isset($field['cardinality']) && ($field['cardinality'] != 1) && (boolval($settings['multiple']) == TRUE)) {
     foreach ($items as $delta => $item) {
       $value = isset($item[$index]) ? $item[$index] : NULL;
       $element[$delta] = array(
