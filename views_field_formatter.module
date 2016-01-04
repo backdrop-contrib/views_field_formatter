@@ -71,9 +71,20 @@ function views_field_formatter_field_formatter_settings_form($field, $instance, 
       '#type' => 'checkbox',
       '#default_value' => boolval($settings['multiple']),
     );
+    $element['views_field_formatter']['implode_character'] = array(
+      '#title' => t('Implode with this character'),
+      '#description' => t('If it is set, all field values are imploded with this character and sent as one views argument. Empty to disable.'),
+      '#type' => 'textfield',
+      '#default_value' => $settings['implode_character'],
+      '#states' => array(
+        'visible' => array(
+          ':input[name="fields[body][settings_edit_form][settings][views_field_formatter][multiple]"]' => array('checked' => TRUE),
+        ),
+      )
+    );
   } else {
     $element['views_field_formatter']['help'] = array(
-      '#markup' => t('<p>No available Views were found. <a href="@add_view_url">Create</a> or <a href="@enable_views_url">enable</a> a views with tag <em>views_field_formatter</em>.</p>', array('@add_view_url' => url('admin/structure/views/add'), '@enable_views_url' => url('admin/structure/views')))
+      '#markup' => t('<p>No available Views were found. <a href="@add_view_url">Create</a> or <a href="@views_templates">add from the views templates</a> a views with tag <em>views_field_formatter</em>.</p>', array('@add_view_url' => url('admin/structure/views/add'), '@views_templates' => url('admin/structure/views/add-template')))
     );
   }
 
@@ -97,6 +108,10 @@ function views_field_formatter_field_formatter_settings_summary($field, $instanc
     $summary[] = t('Multiple: @multiple', array('@multiple' => $multiple));
   }
 
+  if (!empty($settings['implode_character'])) {
+    $summary[] = t('Implode character: @character', array('@character' => $settings['implode_character']));
+  }
+
   return implode('<br />', $summary);
 }
 
@@ -116,11 +131,22 @@ function views_field_formatter_field_formatter_view($entity_type, $entity, $fiel
   $key = $entity_info['entity keys']['id'];
 
   if (isset($field['cardinality']) && ($field['cardinality'] != 1) && (boolval($settings['multiple']) == TRUE)) {
-    foreach ($items as $delta => $item) {
-      $value = isset($item[$index]) ? $item[$index] : NULL;
-      $element[$delta] = array(
-        '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, $delta)
+    if (!empty($settings['implode_character'])) {
+      $values = array();
+      foreach ($items as $item) {
+        $values[] = isset($item[$index]) ? $item[$index] : NULL;
+      }
+      $value = implode($settings['implode_character'], array_filter($values));
+      $element[0] = array(
+        '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, 0)
       );
+    } else {
+      foreach ($items as $delta => $item) {
+        $value = isset($item[$index]) ? $item[$index] : NULL;
+        $element[$delta] = array(
+          '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, $delta)
+        );
+      }
     }
   } else {
     $value = isset($items[0][$index]) ? $items[0][$index] : NULL;
