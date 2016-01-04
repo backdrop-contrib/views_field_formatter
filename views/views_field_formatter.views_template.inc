@@ -1,6 +1,14 @@
 <?php
 
-function views_field_formatter_views_default_views() {
+/**
+ * @file
+ * View templates for the Views Field Formatter module.
+ */
+
+/**
+ * Implements hook_views_templates().
+ */
+function views_field_formatter_views_templates() {
   $entity_info = entity_get_info();
   $views = array();
 
