@@ -121,38 +121,41 @@ function views_field_formatter_field_formatter_settings_summary($field, $instanc
  */
 function views_field_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
-  $settings = $display['settings']['views_field_formatter'];
-  list($view, $view_display) = explode('::', $settings['view']);
 
-  $field_columns = array_keys($field['columns']);
-  $index = array_shift($field_columns);
+  if (!empty($items)) {
+    $settings = $display['settings']['views_field_formatter'];
+    list($view, $view_display) = explode('::', $settings['view']);
 
-  $entity_info = entity_get_info($entity_type);
-  $key = $entity_info['entity keys']['id'];
+    $field_columns = array_keys($field['columns']);
+    $index = array_shift($field_columns);
 
-  if (isset($field['cardinality']) && ($field['cardinality'] != 1) && (boolval($settings['multiple']) == TRUE)) {
-    if (!empty($settings['implode_character'])) {
-      $values = array();
-      foreach ($items as $item) {
-        $values[] = isset($item[$index]) ? $item[$index] : NULL;
+    $entity_info = entity_get_info($entity_type);
+    $key = $entity_info['entity keys']['id'];
+
+    if (isset($field['cardinality']) && ($field['cardinality'] != 1) && (boolval($settings['multiple']) == TRUE)) {
+      if (!empty($settings['implode_character'])) {
+        $values = array();
+        foreach ($items as $item) {
+          $values[] = isset($item[$index]) ? $item[$index] : NULL;
+        }
+        $value = implode($settings['implode_character'], array_filter($values));
+        $element[0] = array(
+          '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, 0)
+        );
+      } else {
+        foreach ($items as $delta => $item) {
+          $value = isset($item[$index]) ? $item[$index] : NULL;
+          $element[$delta] = array(
+            '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, $delta)
+          );
+        }
       }
-      $value = implode($settings['implode_character'], array_filter($values));
+    } else {
+      $value = isset($items[0][$index]) ? $items[0][$index] : NULL;
       $element[0] = array(
         '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, 0)
       );
-    } else {
-      foreach ($items as $delta => $item) {
-        $value = isset($item[$index]) ? $item[$index] : NULL;
-        $element[$delta] = array(
-          '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, $delta)
-        );
-      }
     }
-  } else {
-    $value = isset($items[0][$index]) ? $items[0][$index] : NULL;
-    $element[0] = array(
-      '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, 0)
-    );
   }
 
   return $element;
