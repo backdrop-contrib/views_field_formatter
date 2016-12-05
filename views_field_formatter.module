@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Views field formatter module.
+ */
+
+/**
  * Implements hook_field_formatter_info().
  */
 function views_field_formatter_field_formatter_info() {
@@ -13,7 +18,7 @@ function views_field_formatter_field_formatter_info() {
       'settings' => array(
         'views_field_formatter' => array(
           'view' => '',
-          'multiple' => FALSE
+          'multiple' => FALSE,
         ),
       ),
     ),
@@ -30,7 +35,7 @@ function views_field_formatter_field_formatter_settings_form($field, $instance, 
   $settings = $display['settings']['views_field_formatter'];
   $element = array();
 
-  // Get only enabled views
+  // Get only enabled views.
   $views = views_get_enabled_views();
   $options = array();
   foreach ($views as $view => $data) {
@@ -46,7 +51,7 @@ function views_field_formatter_field_formatter_settings_form($field, $instance, 
     }
 
     foreach ($data->display as $display => $display_data) {
-      $options[$data->human_name][$view . '::' . $display] = $display_data->display_title . ' (' . $view . '::' . $display. ')';
+      $options[$data->human_name][$view . '::' . $display] = $display_data->display_title . ' (' . $view . '::' . $display . ')';
     }
   }
 
@@ -80,14 +85,14 @@ function views_field_formatter_field_formatter_settings_form($field, $instance, 
         'visible' => array(
           ':input[name="fields[body][settings_edit_form][settings][views_field_formatter][multiple]"]' => array('checked' => TRUE),
         ),
-      )
-    );
-  } else {
-    $element['views_field_formatter']['help'] = array(
-      '#markup' => t('<p>No available Views were found. <a href="@add_view_url">Create</a> or <a href="@views_templates">add from the views templates</a> a views with tag <em>views_field_formatter</em>.</p>', array('@add_view_url' => url('admin/structure/views/add'), '@views_templates' => url('admin/structure/views/add-template')))
+      ),
     );
   }
-
+  else {
+    $element['views_field_formatter']['help'] = array(
+      '#markup' => t('<p>No available Views were found. <a href="@add_view_url">Create</a> or <a href="@views_templates">add from the views templates</a> a views with tag <em>views_field_formatter</em>.</p>', array('@add_view_url' => url('admin/structure/views/add'), '@views_templates' => url('admin/structure/views/add-template'))),
+    );
+  }
 
   return $element;
 }
@@ -115,7 +120,6 @@ function views_field_formatter_field_formatter_settings_summary($field, $instanc
   return implode('<br />', $summary);
 }
 
-
 /**
  * Implements hook_field_formatter_view().
  */
@@ -140,20 +144,22 @@ function views_field_formatter_field_formatter_view($entity_type, $entity, $fiel
         }
         $value = implode($settings['implode_character'], array_filter($values));
         $element[0] = array(
-          '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, 0)
+          '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, 0),
         );
-      } else {
+      }
+      else {
         foreach ($items as $delta => $item) {
           $value = isset($item[$index]) ? $item[$index] : NULL;
           $element[$delta] = array(
-            '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, $delta)
+            '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, $delta),
           );
         }
       }
-    } else {
+    }
+    else {
       $value = isset($items[0][$index]) ? $items[0][$index] : NULL;
       $element[0] = array(
-        '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, 0)
+        '#markup' => views_embed_view($view, $view_display, $value, $entity->$key, 0),
       );
     }
   }
@@ -173,10 +179,16 @@ function views_field_formatter_views_api() {
 
 /**
  * Boolval is only available for PHP >= 5.5, I didn't know that.
+ *
  * Anyway, here's the fix.
  */
 if (!function_exists('boolval')) {
+
+  /**
+   * Boolval function.
+   */
   function boolval($val) {
     return (bool) $val;
   }
+
 }
