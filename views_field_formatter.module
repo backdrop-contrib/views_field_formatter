@@ -30,21 +30,24 @@ function views_field_formatter_field_formatter_info() {
 /**
  * Implements hook_field_formatter_settings_form().
  */
-function views_field_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+function views_field_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, $form_state) {
   $display = $instance['display'][$view_mode];
   $settings = $display['settings']['views_field_formatter'];
   $element = array();
 
   // Get only enabled views.
+
   $views = views_get_enabled_views();
   $options = array();
   foreach ($views as $view => $data) {
     // If editing a field from a Views, remove the current view from the list.
+
     if (isset($form_state['view']) && $form_state['view']->name == $view) {
       continue;
     }
 
     // Remove Views which don't have the tag 'views_field_formatter'.
+
     $tags = explode(',', $data->tag);
     if (!in_array('views_field_formatter', $tags)) {
       continue;
@@ -178,7 +181,7 @@ function views_field_formatter_field_formatter_view($entity_type, $entity, $fiel
 function views_field_formatter_views_api() {
   return array(
     'api' => 3,
-    'path' => drupal_get_path('module', 'views_field_formatter') . '/views',
+    'path' => backdrop_get_path('module', 'views_field_formatter') . '/views',
   );
 }
 
