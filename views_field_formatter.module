@@ -110,7 +110,9 @@ function views_field_formatter_field_formatter_settings_summary($field, $instanc
   $display = $instance['display'][$view_mode];
   $settings = $display['settings']['views_field_formatter'];
   $summary = array();
-  list($view, $view_display) = explode('::', $settings['view']);
+  $empty = [t('Not set'), t('Not set')];
+  $view_settings = explode('::', $settings['view']);
+  list($view, $view_display) = (count($view_settings) > 1) ? $view_settings : $empty;
   $multiple = (boolval($settings['multiple']) == TRUE) ? 'Enabled' : 'Disabled';
 
   if (isset($settings['view'])) {
